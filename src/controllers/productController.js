@@ -89,7 +89,6 @@ exports.reactivateProduct = async (req, res, next) => {
 }
 
 exports.updateProduct = async (req, res, next) => {
-    //TODO: agregar validaciones y atributos que se pueden editar
     const { id } = req.params;
     const {
         nombre,

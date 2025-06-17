@@ -55,6 +55,6 @@ exports.registerInPostgreSQL = async (userData) => {
 }
 
 exports.obtenerPerfiles = async () => {
-    const { rows } = await pool.query(`SELECT * FROM perfil ORDER BY id ASC`);
+    const { rows } = await pool.query(`SELECT * FROM perfil ORDER BY idperfil ASC`);
     return rows
 }

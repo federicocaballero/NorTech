@@ -49,7 +49,7 @@ exports.signUpNewEmail = async (req, res, next) => {
         supabaseUser = data.user; // Asignamos el usuario de Supabase
 
         // 3. Registrar en PostgreSQL
-        console.log('Datos a insertar en PostgreSQL:', userData);
+        // console.log('Datos a insertar en PostgreSQL:', userData);
         const registeredUser = await authModel.registerInPostgreSQL({
             idperfil,
             id_auth_supabase: supabaseUser.id,
