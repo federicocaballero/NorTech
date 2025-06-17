@@ -11,7 +11,8 @@ const {
     reactivateProduct,
     getActiveProducts,
     getInactiveProducts,
-    getCategories
+    getCategories,
+    getBrands
 } = require("../controllers/productController");
 
 // Middlewares
@@ -25,7 +26,7 @@ router.put("/:id", authenticate, isAdmin, updateProduct);
 router.delete("/:id", authenticate, isAdmin, deleteProduct);
 router.post("/:id", authenticate, isAdmin, reactivateProduct);
 router.get("/inactiveProducts", authenticate, isAdmin, getInactiveProducts);
-
+router.get("/brands",  getBrands);
 //No necesitan autenticacion
 router.get("/", getProducts);
 router.get("/categories", getCategories);

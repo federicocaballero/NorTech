@@ -66,13 +66,13 @@ router.post("/signin", signInNewSession);
 
 /**
  * @swagger
- * /auth/categories:
+ * /auth/profiles:
  *   get:
- *     summary: Obtener todas las categorias
+ *     summary: Obtener todas los perfiles de usuario
  *     tags: [Autenticación]
  *     responses:
  *       200:
- *         description: Lista de categorias
+ *         description: Lista de perfiles de usuario
  *         content:
  *           application/json:
  *             schema:

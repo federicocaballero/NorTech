@@ -1,16 +1,10 @@
 const supabase = require("../config/supabase");
 const authModel = require("../models/User");
+const { mostrarRolPorId } = require("../models/User");
 exports.signUpNewEmail = async (req, res, next) => {
     // 1. Validación y preparación de datos
     const requiredFields = ['idperfil', 'nombre', 'apellido', 'usuario', 'contraseña', 'email'];
-    const missingFields = requiredFields.filter(field => !req.body[field]);
 
-    if (missingFields.length > 0) {
-        return res.status(400).json({
-            success: false,
-            message: `Faltan campos obligatorios: ${missingFields.join(', ')}`
-        });
-    }
     let supabaseUser;
     const {
         idperfil,
@@ -83,9 +77,33 @@ exports.signUpNewEmail = async (req, res, next) => {
 
 exports.signInNewSession = async (req, res) => {
     const { email, password } = req.body;
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) return res.status(400).json({ message: "Error al iniciar sesión: ", error });
-    res.status(200).json({ session: data.session });
+    // const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    // if (error) return res.status(400).json({ message: "Error al iniciar sesión: ", error });
+    // res.status(200).json({ session: data.session });
+
+    // 1. Autenticación con Supabase
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) return res.status(400).json({ message: "Error al iniciar sesión", error });
+
+    // 2. Obtener el rol del usuario desde TU tabla de roles
+    try {
+        const userRole = await mostrarRolPorId(data.user.id); // Usamos tu función existente
+
+        // 3. Devolver respuesta con token + info del usuario + rol
+        res.status(200).json({
+            session: {
+                access_token: data.session.access_token,
+                user: {
+                    ...data.user,
+                    role: userRole, // Envías el rol (ej: 1 para admin, 0 para user)
+                    isAdmin: Number(userRole) === 1 // Opcional: booleano para fácil verificación
+                }
+            }
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener el rol del usuario", error });
+    }
 }
 
 exports.getProfiles = async (req, res, next) => {

@@ -69,3 +69,7 @@ exports.obtenerCategorias = async () => {
     const { rows } = await pool.query(`SELECT * FROM categoria ORDER BY "idcategoria" ASC`);
     return rows
 }
+exports.obtenerMarcas = async () => {
+    const { rows } = await pool.query(`SELECT * FROM marca ORDER BY "idMarca" ASC`);
+    return rows
+}
