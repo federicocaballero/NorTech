@@ -1,7 +1,7 @@
 const pool = require("../config/db");
-const tabla = "public.productos"
+const tabla = "public.producto"
 exports.mostrarProductosTodos = async () => {
-    const { rows } = await pool.query("SELECT * FROM productos");
+    const { rows } = await pool.query("SELECT * FROM producto");
     return rows
 }
 exports.mostrarProductoPorId = async (id) => {
@@ -50,19 +50,10 @@ exports.altaProducto = async (id) => {
     return rows[0]
 }
 exports.editarProducto = async (nombre, imagen, idMarca, descripcion, precio_costo, precio_venta, stock, stock_min, idCategoria, id) => {
-    const { rows } = await pool.query(`UPDATE ${tabla} SET 
-        nombre = $1, 
-        imagen = $2, 
-        "idMarca" = $3, 
-        descripcion = $4, 
-        precio_costo = $5, 
-        precio_venta = $6, 
-        stock = $7, 
-        stock_min = $8, 
-        "idCategoria" = $9 
-        WHERE id = $10 
-        RETURNING * `,
-        [nombre, imagen, idMarca, descripcion, precio_costo, precio_venta, stock, stock_min, idCategoria, id]);
+    const { rows } = await pool.query(
+        `SELECT * FROM sp_editar_producto($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+        [nombre, imagen, idMarca, descripcion, precio_costo, precio_venta, stock, stock_min, idCategoria, id]
+    );
     return rows[0]
 }
 exports.obtenerActivos = async () => {
@@ -75,6 +66,10 @@ exports.obtenerInactivos = async () => {
 }
 
 exports.obtenerCategorias = async () => {
-    const { rows } = await pool.query(`SELECT * FROM categoria ORDER BY "idCategoria" ASC`);
+    const { rows } = await pool.query(`SELECT * FROM categoria ORDER BY "idcategoria" ASC`);
+    return rows
+}
+exports.obtenerMarcas = async () => {
+    const { rows } = await pool.query(`SELECT * FROM marca ORDER BY "idMarca" ASC`);
     return rows
 }

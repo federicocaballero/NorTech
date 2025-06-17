@@ -7,7 +7,8 @@ const {
     altaProducto,
     obtenerActivos,
     obtenerInactivos,
-    obtenerCategorias
+    obtenerCategorias,
+    obtenerMarcas
 } = require("../models/Product");
 
 exports.getProducts = async (req, res, next) => {
@@ -89,7 +90,6 @@ exports.reactivateProduct = async (req, res, next) => {
 }
 
 exports.updateProduct = async (req, res, next) => {
-    //TODO: agregar validaciones y atributos que se pueden editar
     const { id } = req.params;
     const {
         nombre,
@@ -140,6 +140,15 @@ exports.getInactiveProducts = async (req, res, next) => {
 exports.getCategories = async (req, res, next) => {
     try {
         const result = await obtenerCategorias();
+        res.status(200).json(result);
+    } catch (error) {
+        next(error); 
+    }
+}
+
+exports.getBrands = async (req, res, next) => {
+    try {
+        const result = await obtenerMarcas();
         res.status(200).json(result);
     } catch (error) {
         next(error); 
